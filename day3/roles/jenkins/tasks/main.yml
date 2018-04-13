@@ -1,0 +1,72 @@
+- name: Creating jenkins Group
+  group:
+    name: "{{ user_group }}"
+    state: present
+
+- name: Creating the user jenkins
+  user:     
+    name: "{{ name_user }}"
+    group: "{{ user_group }}"
+    state: present
+  notify:
+    - save jenkins details
+  become: yes
+
+- name: Create Jenkins_home folder
+  file:
+    path: "{{ jenkins_home }}"
+    state: directory
+    owner: "{{ name_user }}"
+    group: "{{ user_group }}"
+    mode: 0755
+  notify:
+    - save jenkins details
+  become: yes
+
+- name: Create Jenkins bin folder
+  file:
+    path: "{{ jenkins_bin }}"
+    state: directory
+    owner: "{{ name_user }}"
+    group: "{{ user_group }}"
+    mode: 0755
+  notify:
+    - save jenkins details
+  become: yes
+
+- name: Download Jenkins .war
+  get_url: 
+    url: "{{ jenkins_download_url }}" 
+    dest: "{{ jenkins_bin }}"
+
+- name: Create Jenkins unit
+  template:
+    src: jenkins.service.j2
+    dest: /etc/systemd/system/jenkins.service
+  notify:
+    - systemd daemon reload
+  become: yes
+
+- name: Jenkins Service Running and Enabled
+  service: 
+    name: jenkins
+    state: started
+    enabled: yes
+
+- name: Check if jenkins Process Running
+  shell: ps -aux | grep "jenkins"
+  args:
+    warn: false
+
+- name: Check if Jenkins Responds 
+  shell: curl -I 10.0.0.100 | grep "X-Jenkins"
+  args:
+    warn: false
+
+
+
+
+
+
+
+

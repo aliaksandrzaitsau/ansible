@@ -1,0 +1,7 @@
+- name: java version to Facts
+  copy: 
+    content: >
+      {
+        "java_version": "{{ java_version }}"
+      }
+    dest: /etc/ansible/facts.d/java.fact

@@ -1,0 +1,58 @@
+- name: MyTask
+  hosts: all
+ 
+  vars:
+    user: "devops"
+
+  tasks:
+  
+  - group:
+      name: "{{user}}"
+
+  - name: Ensure DevopsUser Added
+    user:
+      name: "{{user}}"
+      comment: "User of devops"
+      group: "{{user}}"
+      groups: "wheel"
+
+  - name: Set authorized key in alternate location
+    authorized_key:
+      user: "{{user}}"
+      key: "{{ lookup('file', '/home/student/ansible/day1/mykey.pub') }}"
+      path: "/home/{{user}}/.ssh/authorized_keys"
+      manage_dir: False 
+    
+  - name: "Set sudoers"
+    lineinfile: "dest=/etc/sudoers
+      insertafter=EOF
+      line='{{user}} ALL=(ALL) NOPASSWD: ALL'
+      regexp='{{user}} ALL=(ALL) NOPASSWD: ALL'
+      state=present"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,19 @@
+  - name: Check If java is already installed or not
+    shell: "{{ jdk_release }}/bin/java -version 2>&1 | grep version | awk '{print $3}' | sed 's/\"//g'"
+    register: java_installed
+
+  - name: Check Java Version
+    shell: java -version 2>&1 | grep "{{ jdk_release }}"  
+
+  - name: Java version
+    shell: java -version 2>&1 | grep version | awk '{print $3}' | sed 's/"//g' 
+    register: java_version 
+  - debug: var=java_version
+
+  - name: Install java
+    yum: name=java state=installed
+    
+  - name: Check if java installed
+    shell: java -version
+    args:
+      warn: false

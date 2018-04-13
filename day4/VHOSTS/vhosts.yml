@@ -1,0 +1,13 @@
+- name: vhost
+  hosts: localhost
+
+  vars:
+    domains:
+      - {servername: "www.firstsite.com", documentroot "/www/firstsite"}
+      - {servername: "www.secondtsite.com", documentroot "/www/secondsite", serveradmin: "master@secondsite"} 
+
+  tasks:
+    - name: do some 
+      template:
+        src: vhost.j2
+        dest: /home/student/ansibleDay4/vhost.conf

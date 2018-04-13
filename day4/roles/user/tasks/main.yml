@@ -1,0 +1,22 @@
+- name: Ensure UserGroup Added
+  group:
+    name: "{{ main_group | default(main_user)}}"
+    gid: "{{ main_group_id | default(omit)}}"
+    state: present
+  
+
+- name: Ensure User Added
+  user:
+    name: "{{ main_user | mandatory}}"
+    uid: "{{ main_user_id | default(omit)}}"
+    group: "{{ main_group | default(main_user)}}"
+    groups: "{{user_groups| default(omit)}}"
+    home: "{{ user_home|default('/home/' + main_user)}}"
+
+    state: present
+
+- include_tasks: ssh.yml
+  when: keys == true
+
+- include_tasks: sudoers.yml
+  when: sudoers == true

@@ -1,0 +1,16 @@
+- hosts: localhost
+
+  vars:
+    MyList:
+    - { name: Aleh, id: 1273948 }
+    - { name: Valera, id: 0236974 }
+    - { name: Petya, id: 9671582 }
+    - { name: Identity, id: 1111777 }
+    - { name: God, id: 4269874 }
+    - { name: Jironimo, id: 4236987 }
+    - { name: Santa, id: 2674895 }
+
+  tasks:
+  - debug: msg="identity_id is {{ MyList | find(11) }}"
+ 
+

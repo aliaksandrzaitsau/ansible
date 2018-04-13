@@ -1,0 +1,20 @@
+- name: super_roles 
+  hosts: all
+
+  pre_tasks:
+  - debug: msg="will work first"
+             
+- import_playbook: appserver.yml
+  tags:
+    - appserver
+- import_playbook: webserver.yml
+  tags:
+    - webserver
+- import_playbook: debug.yml
+  tags:
+    - always
+- import_playbook: sanity.yml
+  tags:
+    - sanity
+  
+   

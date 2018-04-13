@@ -1,0 +1,9 @@
+- name: Check if jenkins Process Running
+  shell: ps -aux | grep "httpd"
+  args:
+    warn: false
+
+- name: Check if jenkins Process Running
+  shell: ps -aux | grep "jenkins"
+  args:
+    warn: false

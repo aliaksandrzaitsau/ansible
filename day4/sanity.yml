@@ -1,0 +1,22 @@
+- name: Install
+  hosts: app
+  roles:
+    - role: sanity
+      process: jenkins
+      local_ip: localhost:8080
+      java_version: 1.8.0
+      remote_server: 10.0.0.140
+      java: true
+
+            
+- name: Install
+  hosts: web
+  roles:
+    - role: sanity
+      process: httpd
+      local_ip: localhost
+      remote_server: 10.0.0.141:8080
+      java: false
+      
+      
+      

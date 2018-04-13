@@ -1,0 +1,6 @@
+main_user: devops
+main_group: devops
+main_user_id: 950
+main_group_id: 950
+Key_pass: /home/student/ansibleDay2/day2/devops_user/files
+

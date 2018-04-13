@@ -1,0 +1,8 @@
+- name: super_roles 
+  hosts: all
+
+  pre_tasks:
+    - name: Example of pre_task
+      debug:
+        msg: "Good morning!"
+      

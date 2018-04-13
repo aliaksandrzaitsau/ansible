@@ -1,0 +1,3 @@
+- name: restart httpd
+  systemd: state=started name=httpd
+  become: yes

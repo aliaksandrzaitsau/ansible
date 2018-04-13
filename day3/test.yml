@@ -1,0 +1,6 @@
+- name: Install
+  hosts: all
+
+  tasks:
+  - name: Ensure OpenJDK Installed
+    proc.sh

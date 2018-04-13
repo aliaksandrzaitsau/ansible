@@ -1,0 +1,81 @@
+---
+# tasks file for jenkins
+
+#- name: jenkins group
+#  group:
+#    name: "{{ jenkins_user }}"
+#    state: present
+#
+#- name: jenkins user
+#  user:     
+#    name: "{{ jenkins_user }}"
+#    group: "{{ jenkins_user }}"
+#    state: present
+#
+#- name: creating jenkins_home directory
+#  file:
+#    path: "{{ jenkins_home }}"
+#    state: directory
+#    owner: "{{ jenkins_user }}"
+#    group: "{{ jenkins_user }}"
+#    mode: 0755
+#
+- name: creating jenkins_bin folder
+  file:
+    path: "{{ bin_folder }}"
+    state: directory
+    owner: "{{ main_user }}"
+    group: "{{ main_user }}"
+    mode: 0755
+
+- name: downloading jenkins.wars
+  get_url: 
+    url: "{{ jenkins_url }}" 
+    dest: "{{ bin_folder }}jenkins.war"
+#  when: ansible_local.jenkins.release != "2.99"  
+  
+
+- name: creating jenkins service
+  template:
+    src: jenkins.service.j2
+    dest: /etc/systemd/system/jenkins.service
+  notify:
+    - daemon reload
+
+- name: enable jenkins service 
+  service:
+    name: "{{ main_user }}"
+    enabled: yes
+
+- name: start the jenkins service
+  service: name=jenkins state=started
+
+- name: checking jenkins is running 
+  shell: ps -eo cmd | grep -v grep | grep "jenkins" 
+  args: 
+    warn: false
+
+- name: save jenkins details
+  copy: 
+    content: >
+      {
+        "release": "{{ jenkins_vers }}",
+        "user": {
+          "name": "{{ main_user }}",
+        },
+        "group": {
+          "name": "{{ main_group }}",
+        },
+        "jenkins_download_url": "{{ jenkins_url }}",
+      }
+    dest: /etc/ansible/facts.d/jenkins.fact
+  become: yes
+
+
+
+
+
+
+
+
+

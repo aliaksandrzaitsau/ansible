@@ -1,0 +1,23 @@
+- name: Creating java directory 
+  file:
+    path: "/opt/oracle/java/{{ java_version }}"
+    state: directory
+    recurse: yes
+  become: yes
+
+- name: Check if java exists
+  local_action: stat path="jdk{{ java_version }}.tar.gz"
+
+
+- name: Unpack java
+  unarchive:
+    src: jdk{{ java_version }}.tar.gz
+    dest: /opt/oracle/java/{{ java_version }}/
+
+
+- name: Setting up java alternative
+  alternatives:
+    name: java
+    link: /usr/bin/java
+    path: /opt/oracle/java/{{ java_version }}/jdk1.8.0_161/bin/java
+  become: yes

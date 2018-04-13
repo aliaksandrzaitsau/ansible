@@ -1,0 +1,19 @@
+- name: Check if Process is Running
+  shell: ps -aux | grep "{{ process }}"
+  args:
+    warn: false
+
+- name: checking local url
+  shell: curl -I "{{ local_ip }}" 
+  args:
+    warn: false
+
+- name: checking remote server
+  shell:  curl -I "{{ remote_server }}" 
+  args:
+    warn: false
+
+- include_tasks: java.yml
+  when: java == true
+  
+

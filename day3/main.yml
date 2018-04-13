@@ -1,0 +1,24 @@
+- name: Install
+  hosts: all
+
+  pre_tasks:
+   - debug: msg="will work first"
+      
+  roles:
+    - common
+    - user
+ 
+- name: Install
+  hosts: app
+  roles:
+    - java
+    - jenkins
+
+- name: Install
+  hosts: web
+  roles:
+    - httpd
+
+  post_tasks:
+  - debug: msg="will work at the end"      
+

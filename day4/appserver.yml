@@ -1,0 +1,57 @@
+- name: Install
+  hosts: app
+  become: yes
+  roles: 
+    - role: common
+    - role: user
+      main_user: devops
+      main_group: devops
+      main_user_id: 950
+      main_group_id: 950
+      user_home: /home/{{ main_user }}
+      user_groups: users
+      keys: true
+      sudoers: true
+    - role: jenkins
+
+
+
+
+
+
+#      main_user: jenkins
+#      main_group: jenkins
+#      main_user_id: 0755
+#      main_group_id: 0755
+#      user_home: /opt/{{ main_user }}
+#      user_groups: users
+#      bin folder: /opt/{{ main_user }}/bin
+#      keys: false
+#      sudoers: false
+     
+      
+
+#    - role: sanity
+#      java: true
+#      jenkins: true
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 

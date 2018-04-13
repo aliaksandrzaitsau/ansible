@@ -1,0 +1,37 @@
+- name: httpd install
+  yum: name=httpd state=latest
+
+- name: vhosts proxy
+  template: 
+    src: proxy.conf
+    dest: /etc/httpd/conf.d/
+  notify:
+    - restart httpd
+  become: yes
+
+- name: Enable service httpd
+  service:
+    name: httpd
+    enabled: yes
+
+- name: httpd start 
+  service: name=httpd state=started
+
+- name: Check if httpd Responds
+  shell: systemctl status httpd
+  args:
+    warn: false
+
+- command: service httpd status
+  args:
+    warn: false
+
+- name: Check if httpd Process Running
+  shell: ps -aux | grep "httpd"
+  args:
+    warn: false
+
+- name: Check if Jenkins Responds 
+  shell: curl -I 10.0.0.100 | grep "X-Jenkins"
+  args:
+    warn: false

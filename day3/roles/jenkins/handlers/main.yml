@@ -1,0 +1,23 @@
+- name: systemd daemon reload
+  systemd: daemon_reload=yes
+  become: yes
+
+- name: restart jenkins
+  systemd: state=started name=jenkins
+  become: yes
+
+- name: save jenkins details
+  copy: 
+    content: >
+      {
+        "release": "{{ jenkins_version }}",
+        "user": {
+          "name": "{{ name_user }}",
+        },
+        "group": {
+          "name": "{{ user_group }}",
+        },
+        "jenkins_download_url": "{{ jenkins_download_url }}",
+      }
+    dest: /etc/ansible/facts.d/jenkins.fact
+  become: yes

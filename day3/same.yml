@@ -1,0 +1,9 @@
+- name: Install
+  hosts: app
+  vars:
+    java_version: java8
+  roles:
+    - java1
+
+
+

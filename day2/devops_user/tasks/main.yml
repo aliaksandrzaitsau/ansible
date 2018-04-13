@@ -1,0 +1,27 @@
+   - group:
+      name: "{{ main_user }}"
+      gid: "{{ main_group_id }}"
+      state: present
+     become: yes
+
+   - name: Ensure DevopsUser Added
+     user:
+      name: "{{ main_user }}"
+      comment: "User of devops"
+      uid: "{{ main_user_id }}"
+      group: "{{ main_group }}"
+     become: yes
+
+   - name: Add user in sudoers
+     template:
+      src: devops
+      dest: /etc/sudoers.d/
+
+   - name: Set authorized key in alternate location
+     authorized_key:
+      user: "{{ main_user }}"
+      key: "{{ lookup('file', '{{ Key_pass }}/mykey.pub') }}"
+      path: "/home/{{ main_user }}/.ssh/authorized_keys"
+      manage_dir: False 
+    
+ 

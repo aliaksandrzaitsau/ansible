@@ -1,0 +1,54 @@
+- name: Jenkins
+  hosts: app
+
+  vars:
+    jdk_release: "1.8.0"
+    JenVar: "2.99"
+
+  tasks:
+  - name: Ensure OpenJDK Installed
+    yum: name=java-{{ jdk_release }}-openjdk
+
+  - name: Check Java Version
+    shell: java -version 2>&1 | grep "{{ jdk_release }}"
+
+    
+  - name: Jenkins - install | Install java
+    yum: name=java state=installed
+
+  - name: Jenkins - install | Install Jenkins 
+    yum: pkg=https://pkg.jenkins.io/redhat/jenkins-{{ JenVar }}-1.1.noarch.rpm state=installed
+
+  - name: Jenkins - install | Start and enable Jenkins 
+    service: name=jenkins state=started enabled=yes
+
+- name: HTTPD
+  hosts: web
+
+  tasks:
+  - name: HTTPD - install
+    yum: name=httpd state=latest
+
+  - name: config httpd (/etc/httpd/conf/httpd.conf)
+    blockinfile:
+      insertafter: "AddDefaultCharset UTF-8"
+      path: /etc/httpd/conf/httpd.conf
+      content: "<VirtualHost *:80>\n
+      ProxyRequests Off\n
+      ProxyPreserveHost On\n
+      ProxyVia full \n
+
+      <proxy *>\n
+      Order deny,allow\n
+      Allow from all\n
+      </proxy> \n\n
+     
+      ProxyPass        /  http://10.0.0.21:8080/\n
+      ProxyPassReverse /  http://10.0.0.21:8080/\n
+  </VirtualHost>"
+
+  - name: HTTPD start and enable
+    service: name=httpd state=started enabled=yes
+    
+
+
